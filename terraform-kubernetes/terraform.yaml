@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /metrics
+    prometheus.io/port: ledport
+  labels:
+    name: youtube-terraform
+    release: prometheus
+  name: youtube-terraform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: youtube-terraform
+  template:
+    metadata:
+      labels:
+        app: youtube-terraform
+    spec:
+      containers:
+      - name: youtube-terraform
+        image: linuxrobotgeek/youtube-terraform:latest
+        imagePullPolicy: Always
+        ports:
+        - name: ledport
+          containerPort: 5000
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: youtube-terraform
+  labels:
+    app: youtube-terraform
+spec:
+  selector:
+    app: youtube-terraform
+  ports:
+    - name: youtube-terraform
+      protocol: TCP
+      port: 5000
+      targetPort: ledport
+  type: LoadBalancer
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: youtube-terraform
+  namespace: monitoring
+  labels:
+    app: youtube-terraform
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: youtube-terraform
+  endpoints:
+  - port: youtube-terraform
+    path: /metrics
+    interval: 15s
+  namespaceSelector:
+    matchNames:
+    - default
