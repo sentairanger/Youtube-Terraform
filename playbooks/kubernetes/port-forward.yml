@@ -4,6 +4,6 @@
   tasks:
     - name: Port Forward Service
       register: port
-      command: "kubectl port-forward svc/terraform-monitoring 5000"
+      command: "kubectl port-forward svc/youtube-terraform 5000:5000"
     - debug:
         var: port.stdout_lines
