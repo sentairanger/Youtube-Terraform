@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Port Forward Grafana 
+      register: port
+      command: "kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80"
+    - debug:
+        var: port.stdout_lines

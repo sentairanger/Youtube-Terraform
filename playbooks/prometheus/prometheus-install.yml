@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Create a k8s namespace
+      kubernetes.core.k8s:
+        name: monitoring
+        api_version: v1
+        kind: Namespace
+        state: present
+    - name: add prometheus chart
+      command: "helm repo add prometheus-community https://prometheus-community.github.io/helm-charts"
+    - name: add stable chart 
+      command: "helm repo add stable https://charts.helm.sh/stable"
+    - name: update helm repos
+      command: "helm repo update"
+    - name: install prometheus and grafana
+      command: "helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring"
+      

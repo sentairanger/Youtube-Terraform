@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Log into DockerHub
+      community.docker.docker_login:
+        username: username  
+        password: password
+    - name: Tag and push to docker hub
+      docker_image:
+        name: terraform-monitoring:latest
+        repository: linuxrobotgeek/terraform-monitoring:latest
+        push: true
+        source: local
+    - name: Log out of DockerHub
+      community.docker.docker_login:
+        state: absent

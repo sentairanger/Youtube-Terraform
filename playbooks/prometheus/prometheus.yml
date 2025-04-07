@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Port Forward Prometheus
+      register: port
+      command: "kubectl port-forward -n monitoring svc/prometheus-kube-prometheus-prometheus 9090"
+    - debug:
+        var: port.stdout_lines

@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Port Forward ArgoCD
+      register: port
+      command: "kubectl port-forward svc/argocd-server-nodeport 30007:80 -n argocd"
+    - debug:
+        var: port.stdout_lines

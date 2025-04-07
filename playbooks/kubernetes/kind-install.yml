@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  connection: local
+  become: yes
+  tasks:
+    - name: Download Kind for PCs
+      command: "curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64"
+    - name: Move the binary
+      command: "mv ./kind /usr/local/bin/kind"

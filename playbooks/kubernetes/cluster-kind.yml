@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Create cluster for kind
+      command: "kind create cluster --name demo"
+    - name: display the cluster
+      register: cluster 
+      command: "kind get clusters"
+    - debug:
+        var: cluster.stdout_lines
